@@ -6,12 +6,12 @@ const emit = defineEmits(['removeNext']);
 const props = defineProps({
     data: {
         type: Array,
-        default: []
+        default: () => []
     },
 
     filters: {
         type: Array,
-        default: []
+        default: () => []
     }
 });
 
