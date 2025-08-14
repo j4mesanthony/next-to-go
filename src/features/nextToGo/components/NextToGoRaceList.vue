@@ -68,7 +68,6 @@ const raceListComputed = computed(() => {
 function getTimeDiff(startTime) {
     const diffInSeconds = Math.floor((startTime - state.now) / 1000);
     if (diffInSeconds <= -60) emit("removeNext");
-
     return diffInSeconds < 60 ? `${diffInSeconds}s` : `${Math.floor(diffInSeconds / 60)}m ${diffInSeconds % 60}s`;
 }
 </script>
@@ -76,7 +75,7 @@ function getTimeDiff(startTime) {
 <template>
     <div className="flex flex-col gap-1">
         <transition-group name="slide-left">
-            <div v-for="race in raceListComputed" :key="race.race_id" className="bg-white text-left p-4 flex flex-row gap-4 justify-between font-semibold">
+            <div v-for="race in raceListComputed" :key="race.race_id" className="bg-white text-left text-sm p-3 flex flex-row gap-4 justify-between font-semibold">
                 <div className="uppercase">{{ race.meeting_name }} R{{ race.race_number }}</div>
                 <div className="text-red-700">{{  getTimeDiff(race.startTime) }}</div>
             </div>

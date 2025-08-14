@@ -26,7 +26,7 @@ async function getRaces() {
 <template>
     <div className="w-full flex flex-col gap-2">
         <div className="flex flex-row gap-4 items-center grow">
-            <h1 className=" bg-gray-800 text-white text-lg p-4 font-bold uppercase grow max-w-2/3 text-left">Next to go racing</h1>
+            <h1 className=" bg-gray-800 text-white text-md p-3 font-bold uppercase grow max-w-2/3 text-left">Next to go racing</h1>
             <FilterOptions v-model="state.selectedFilters" :options="AVAILABLE_FILTERS" />
         </div>
 
