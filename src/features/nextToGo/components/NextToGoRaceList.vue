@@ -3,8 +3,8 @@ import { computed, reactive, onMounted, onBeforeUnmount } from "vue";
 
 const props = defineProps({
     data: {
-        type: Object,
-        default: {}
+        type: Array,
+        default: []
     }
 });
 
@@ -23,9 +23,7 @@ function startTimer() {
 }
 
 const raceList = computed(() => {
-    const list = Object.values(props.data)
-    // Sort races by start time ASCENDING
-    .sort((a, b) => a.advertised_start.seconds - b.advertised_start.seconds)
+    const list = props.data
     // Map data to include start countdown
     .map(x => {
         const seconds = x.advertised_start.seconds;

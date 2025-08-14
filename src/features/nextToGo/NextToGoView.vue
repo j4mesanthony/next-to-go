@@ -1,18 +1,21 @@
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, computed } from 'vue';
 import { nextToGo as API } from './apis/api.nextToGo';
 import NextToGoRaceList from './components/NextToGoRaceList.vue';
 
 const state = reactive({
-    raceSummaries: {},
+    raceSummaries: [],
 });
 
 onMounted(getRaces);
 
 async function getRaces() {
-    const { data } = await API.getNextNRaces();
+    const { data } = await API.getNextNRaces(5);
     const { race_summaries } = data;
-    state.raceSummaries = race_summaries;
+
+    state.raceSummaries = Object.values(race_summaries)
+    // Sort races by start time ASCENDING
+    .sort((a, b) => a.advertised_start.seconds - b.advertised_start.seconds);
 }
 </script>
 
