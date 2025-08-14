@@ -29,7 +29,7 @@ function startTimer() {
     }, 1000);
 }
 
-const raceList = computed(() => {
+const raceListComputed = computed(() => {
     const _byLessThanMinuteOldOfValidCategory = ({ advertised_start, category_id }) => {
         const seconds = advertised_start.seconds;
         const startTime = new Date(seconds * 1000);
@@ -38,11 +38,11 @@ const raceList = computed(() => {
     }
 
     const list = props.data
-    // We don't want to present any old races on first render.
+    // We don't want old or irrelevant races
     .filter(_byLessThanMinuteOldOfValidCategory)
     // Sort races by start time ASCENDING
     .sort((a, b) => a.advertised_start.seconds - b.advertised_start.seconds)
-    // TODO: Refactor map and filter into a reducer
+    // Pull out the data we need to present and include formatted startTime to be used in getTimeDiff call.
     .map(x => {
         const seconds = x.advertised_start.seconds;
         const startTime = new Date(seconds * 1000);
@@ -59,6 +59,12 @@ const raceList = computed(() => {
     return list;
 });
 
+/**
+ * Calculates the time difference in seconds between the current time and the provided start time.
+ * This function is used instead of a computed to avoid triggering a re-render of the entire race list when the time updates.
+ * @param {Date} startTime - The start time of the race, as a Date object.
+ * @returns {string} The time difference in seconds between now and the start time formatted as string with minute and/or second data.
+ */
 function getTimeDiff(startTime) {
     const diffInSeconds = Math.floor((startTime - state.now) / 1000);
     if (diffInSeconds <= -60) emit("removeNext");
@@ -70,7 +76,7 @@ function getTimeDiff(startTime) {
 <template>
     <div className="flex flex-col gap-1">
         <transition-group name="slide-left">
-            <div v-for="race in raceList" :key="race.race_id" className="bg-white text-left p-4 flex flex-row gap-4 justify-between font-semibold">
+            <div v-for="race in raceListComputed" :key="race.race_id" className="bg-white text-left p-4 flex flex-row gap-4 justify-between font-semibold">
                 <div className="uppercase">{{ race.meeting_name }} R{{ race.race_number }}</div>
                 <div className="text-red-700">{{  getTimeDiff(race.startTime) }}</div>
             </div>

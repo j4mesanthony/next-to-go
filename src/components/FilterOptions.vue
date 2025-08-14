@@ -13,6 +13,11 @@ const { modelValue, options } = defineProps({
     }
 });
 
+/**
+ * Updates the filter state based on the selected filter option.
+ * @param {Event} e - The event object triggered by the filter option selection.
+ * @param {string} id - The identifier of the selected filter option.
+ */
 function setFilters(e, id) {
     if (modelValue.includes(id)) {
         const newFilters = modelValue.filter(x => x !== id);
