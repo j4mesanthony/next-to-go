@@ -61,7 +61,7 @@ const raceListComputed = computed(() => {
 
 /**
  * Calculates the time difference in seconds between the current time and the provided start time.
- * This function is used instead of a computed to avoid triggering a re-render of the entire race list when the time updates.
+ * This function is used instead implementing with raceListComputed to avoid triggering a re-render of the entire race list when the state.now updates.
  * @param {Date} startTime - The start time of the race, as a Date object.
  * @returns {string} The time difference in seconds between now and the start time formatted as string with minute and/or second data.
  */
