@@ -5,6 +5,11 @@ const props = defineProps({
     data: {
         type: Array,
         default: []
+    },
+
+    filters: {
+        type: Array,
+        default: []
     }
 });
 
@@ -24,7 +29,6 @@ function startTimer() {
 
 const raceList = computed(() => {
     const list = props.data
-    // Map data to include start countdown
     .map(x => {
         const seconds = x.advertised_start.seconds;
         const startTime = new Date(seconds * 1000);
@@ -34,13 +38,14 @@ const raceList = computed(() => {
             id: x.race_id, 
             meeting_name: x.meeting_name, 
             race_number: x.race_number,
+            category_id: x.category_id,
             diffInSeconds,
             // Format countdown string to include minutes and seconds (1m 30s)
             start_time_formatted: diffInSeconds < 60 ? `${diffInSeconds}s` : `${Math.floor(diffInSeconds / 60)}m ${diffInSeconds % 60}s`
         }
     })
     // TODO: Refactor map and filter into a reducer
-    .filter(({ diffInSeconds }) => diffInSeconds > -60);
+    .filter(({ diffInSeconds, category_id }) => (props.filters.includes(category_id) && diffInSeconds > -60));
 
     return list;
 });
