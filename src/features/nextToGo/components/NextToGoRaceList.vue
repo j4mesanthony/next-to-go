@@ -29,6 +29,9 @@ function startTimer() {
 
 const raceList = computed(() => {
     const list = props.data
+    // Sort races by start time ASCENDING
+    .sort((a, b) => a.advertised_start.seconds - b.advertised_start.seconds)
+    // TODO: Refactor map and filter into a reducer
     .map(x => {
         const seconds = x.advertised_start.seconds;
         const startTime = new Date(seconds * 1000);
@@ -44,7 +47,6 @@ const raceList = computed(() => {
             start_time_formatted: diffInSeconds < 60 ? `${diffInSeconds}s` : `${Math.floor(diffInSeconds / 60)}m ${diffInSeconds % 60}s`
         }
     })
-    // TODO: Refactor map and filter into a reducer
     .filter(({ diffInSeconds, category_id }) => (props.filters.includes(category_id) && diffInSeconds > -60));
 
     return list;
