@@ -13,12 +13,12 @@ const { modelValue, options } = defineProps({
     }
 });
 
-function setFilters(id) {
-    // if (modelValue.length === 1 && modelValue[0] === id) {
-    //     emit('update:modelValue', options.map(({id}) => id));
-    // }
+function setFilters(e, id) {
     if (modelValue.includes(id)) {
-        emit('update:modelValue', modelValue.filter(x => x !== id));
+        const newFilters = modelValue.filter(x => x !== id);
+        const data = newFilters.length ? newFilters : options.map(({id}) => id);
+        !newFilters.length && e.preventDefault();
+        emit('update:modelValue', data);
     }
     else {
         emit('update:modelValue', [...modelValue, id]);
@@ -28,7 +28,7 @@ function setFilters(id) {
 
 <template>
     <div v-for="option in options" :key="option.id">    
-        <input type="checkbox" :checked="modelValue.includes(option.id)" @click="setFilters(option.id)">
+        <input type="checkbox" :checked="modelValue.includes(option.id)" @click="e => setFilters(e, option.id)">
             {{option.name}}
         </input>
     </div>
