@@ -1,9 +1,11 @@
 <script setup>
-console.log(import.meta.env.VITE_API_BASE)
+import NextToGoView from './features/nextToGo/NextToGoView.vue';
+
+
 </script>
 
 <template>
   <div>
-    <h1>Next To Go</h1>
+    <NextToGoView />
   </div>
 </template>
