@@ -1,4 +1,6 @@
 <script setup>
+    import { onMounted } from "vue";
+
     const emit = defineEmits(["update:modelValue"]);
 
     const { modelValue, options } = defineProps({
@@ -12,6 +14,17 @@
             default: () => [],
         },
     });
+
+    onMounted(setOptionsIfEmptySelection);
+
+    function setOptionsIfEmptySelection() {
+        if (!modelValue.length) {
+            emit(
+                "update:modelValue",
+                options.map(({ id }) => id)
+            );
+        }
+    }
 
     /**
      * Updates the filter state based on the selected filter option.
@@ -33,9 +46,10 @@
 <template>
     <div className="flex flex-row justify-between w-full px-3">
         <div v-for="option in options" :key="option.id">
-            <label :for="option.name">{{ option.name }}</label>
+            <label :for="option.name" :data-test-id="option.id">{{ option.name }}</label>
             <input
                 :id="option.name"
+                :data-test-id="`select-${option.id}`"
                 type="checkbox"
                 :checked="modelValue.includes(option.id)"
                 @click="(e) => setFilters(e, option.id)" />

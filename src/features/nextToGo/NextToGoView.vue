@@ -5,11 +5,9 @@
     import FilterOptions from "../../components/FilterOptions.vue";
     import NextToGoRaceList from "./components/NextToGoRaceList.vue";
 
-    const { Horse, Greyhound, Harness } = RACING_CATEGORIES;
-
     const state = reactive({
         raceSummaries: [],
-        selectedFilters: [Horse.id, Greyhound.id, Harness.id],
+        selectedFilters: [],
     });
 
     const AVAILABLE_FILTERS = Object.values(RACING_CATEGORIES);
