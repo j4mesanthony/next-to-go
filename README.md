@@ -13,29 +13,36 @@ Next To Go is a modern web application built with Vue 3 and Vite, designed to di
 
 ```
 src/
-	App.vue                # Main application component
-	main.js                # App entry point
-	style.css              # Global styles (Tailwind CSS)
-	components/            # Shared UI components
-		FilterOptions.vue    # Category filter UI
-		consts/              # Constants (e.g., racing categories)
-		features/
-			nextToGo/          # Next To Go feature module
-				NextToGoView.vue # Main view
-				apis/            # API definitions
-				components/      # Feature-specific components
-				composables/     # Feature-specific composables
-				models/          # Data models
-	utils/                 # Shared utilities
-		apiHandler.js        # Generic API handler
-public/                  # Static assets
-vite.config.js           # Vite configuration
-package.json             # Project metadata and scripts
+  App.vue                  # Main application component
+  main.js                  # App entry point
+  style.css                # Global styles (Tailwind CSS)
+  components/              # Shared UI components
+    FilterOptions.vue      # Category filter UI
+    __tests__/
+      FilterOptions.test.js
+  consts/
+    consts.racingCategories.js # Racing category constants
+  features/
+    nextToGo/              # Next To Go feature module
+      NextToGoView.vue     # Main view for Next To Go
+      apis/
+        api.nextToGo.js    # API definitions for Next To Go view
+      components/
+        NextToGoRaceList.vue   # Race list display
+        __tests__/
+          NextToGoRaceList.test.js
+  utils/
+    apiHandler.js          # Generic API handler
+public/
+  vite.svg                 # Static asset
+vite.config.js             # Vite configuration
+vitest.config.js           # Vitest configuration
+eslint.config.js           # ESLint configuration
+index.html                 # HTML entry point
+package.json               # Project metadata and scripts
 ```
 
 ## Getting Started
-
-### Prerequisites
 
 -   [Node.js](https://nodejs.org/) (v18 or higher recommended)
 -   [npm](https://www.npmjs.com/) (comes with Node.js)
