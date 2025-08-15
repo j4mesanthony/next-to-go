@@ -35,7 +35,7 @@
             const seconds = advertised_start.seconds;
             const startTime = new Date(seconds * 1000);
             const diffInSeconds = Math.floor((startTime - Date.now()) / 1000);
-            return diffInSeconds > -60 && props.categoryIds.includes(category_id);
+            return diffInSeconds >= -60 && props.categoryIds.includes(category_id);
         };
 
         const list = props.data
