@@ -85,7 +85,7 @@ npm run preview
 
 ### Testing
 
-This project uses [Vitest](https://vitest.dev/) for unit testing.
+This project uses [Vue Test Utils](https://test-utils.vuejs.org/) and [Vitest](https://vitest.dev/) for testing.
 
 To run all tests:
 
