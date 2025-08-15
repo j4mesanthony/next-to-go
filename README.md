@@ -1,13 +1,11 @@
 # Next To Go
 
-Next To Go is a modern web application built with Vue 3 and Vite, designed to display and filter upcoming racing events. It features a clean UI, fast performance, and a modular codebase for easy maintenance and extension.
+Next To Go is a modern web application built with Vue 3 and Vite, designed to display and filter upcoming racing events.
 
 ## Features
 
 -   **Live Next To Go Races:** View a list of upcoming races with real-time updates.
--   **Category Filtering:** Filter races by racing categories (e.g., thoroughbred, harness, greyhound).
--   **Responsive UI:** Built with Tailwind CSS for a mobile-friendly experience.
--   **Modular Architecture:** Organized with Vue components, composables, and feature-based folders.
+-   **Category Filtering:** Filter races by racing categories (e.g., horse, greyhound, harness).
 
 ## Project Structure
 
@@ -90,12 +88,6 @@ npm run preview
 This project uses [Vitest](https://vitest.dev/) for unit testing.
 
 To run all tests:
-
-```sh
-npm run test
-```
-
-or
 
 ```sh
 npm run test
