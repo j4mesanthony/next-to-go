@@ -37,13 +37,13 @@ describe("NextToGoRaceList.vue", () => {
         const race1 = wrapper.get(`[data-test-id="${race1Id}"]`);
         expect(race1).toBeTruthy();
         expect(race1.text()).toBe(`${data[0].meeting_name} R${data[0].race_number} (Horse)`);
-        expect(wrapper.get(`[data-test-id="${race1Id}-startTime"]`).text()).toBeDefined();
+        expect(wrapper.get(`[data-test-id="${race1Id}-startTime"]`).text()).toMatch(/[\d+]s/g);
 
         // Race #2
         const race2 = wrapper.get(`[data-test-id="${race2Id}"]`);
         expect(race2).toBeTruthy();
         expect(race2.text()).toBe(`${data[1].meeting_name} R${data[1].race_number} (Horse)`);
-        expect(wrapper.get(`[data-test-id="${race2Id}-startTime"]`).text()).toBeDefined();
+        expect(wrapper.get(`[data-test-id="${race2Id}-startTime"]`).text()).toMatch(/[\d+]m [\d+]s/g);
     });
 
     it("renders multiple races", () => {
