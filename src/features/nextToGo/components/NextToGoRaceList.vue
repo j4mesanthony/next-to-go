@@ -81,7 +81,7 @@
 </script>
 
 <template>
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 relative">
         <transition-group name="slide-left">
             <div
                 v-for="race in raceListComputed"
@@ -96,6 +96,8 @@
                 </div>
             </div>
         </transition-group>
+
+        <h1 v-if="!raceListComputed.length" data-test-id="noDataMsg" className="absolute top-2 pl-3">No races</h1>
     </div>
 </template>
 

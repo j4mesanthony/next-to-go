@@ -125,6 +125,9 @@ describe("NextToGoRaceList.vue", () => {
             },
         });
 
+        // No races are shown (old race data)
         expect(wrapper.findAll(`[data-test-id="raceItem"]`)).toHaveLength(0);
+        // Shows "No data" message
+        expect(wrapper.get(`[data-test-id="noDataMsg"]`)).toBeDefined();
     });
 });
