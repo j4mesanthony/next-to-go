@@ -11,36 +11,38 @@ Next To Go is a modern web application built with Vue 3 and Vite, designed to di
 
 ```
 src/
-  App.vue                  # Main application component
-  main.js                  # App entry point
-  style.css                # Global styles (Tailwind CSS)
-  components/              # Shared UI components
-    FilterOptions.vue      # Category filter UI
+  App.vue                        # Main application component
+  main.js                        # App entry point
+  style.css                      # Global styles (Tailwind CSS)
+  components/                    # Shared UI components
+    FilterOptions.vue            # Category filter UI
     __tests__/
-      FilterOptions.test.js
+      FilterOptions.test.js      # Unit tests for FilterOptions
+  composables/
+    useSecondTimer.js            # Timer composable for updating state per second
   consts/
-    consts.racingCategories.js # Racing category constants
+    consts.racingCategories.js   # Racing category constants
   features/
-    nextToGo/              # Next To Go feature module
-      NextToGoView.vue     # Main view for Next To Go
+    nextToGo/                    # Next To Go feature module
+      NextToGoView.vue           # Main view for Next To Go
       apis/
-        api.nextToGo.js    # API definitions for Next To Go view
+        api.nextToGo.js          # API definitions for Next To Go view
       components/
-        NextToGoRaceList.vue   # Race list display
+        NextToGoRaceList.vue     # Race list display
         __tests__/
-          NextToGoRaceList.test.js
+          NextToGoRaceList.test.js # Unit tests for NextToGoRaceList
+      composables/
+        useNextToGoRaces.js         # Composable for fetching races
   utils/
-    apiHandler.js          # Generic API handler
+    apiHandler.js                # Generic API handler
 public/
-  vite.svg                 # Static asset
-vite.config.js             # Vite configuration
-vitest.config.js           # Vitest configuration
-eslint.config.js           # ESLint configuration
-index.html                 # HTML entry point
-package.json               # Project metadata and scripts
+  vite.svg                       # Static asset
+vite.config.js                   # Vite configuration
+vitest.config.js                 # Vitest configuration
+eslint.config.js                 # ESLint configuration
+index.html                       # HTML entry point
+package.json                     # Project metadata and scripts
 ```
-
-## Getting Started
 
 -   [Node.js](https://nodejs.org/) (v18 or higher recommended)
 -   [npm](https://www.npmjs.com/) (comes with Node.js)

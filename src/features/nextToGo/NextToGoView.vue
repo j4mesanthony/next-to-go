@@ -1,24 +1,9 @@
 <script setup>
-    import { nextToGo as API } from "./apis/api.nextToGo";
-    import { onMounted, reactive } from "vue";
-    import { RACING_CATEGORIES } from "../../consts/consts.racingCategories";
     import FilterOptions from "../../components/FilterOptions.vue";
     import NextToGoRaceList from "./components/NextToGoRaceList.vue";
+    import { useNextToGoRaces } from "./composables/useNextToGoRaces";
 
-    const state = reactive({
-        raceSummaries: [],
-        selectedFilters: [],
-    });
-
-    const AVAILABLE_FILTERS = Object.values(RACING_CATEGORIES);
-
-    onMounted(getRaces);
-
-    async function getRaces() {
-        const { data } = await API.getNextNRaces(5);
-        const { race_summaries } = data;
-        state.raceSummaries = Object.values(race_summaries);
-    }
+    const { AVAILABLE_FILTERS, availableRaces, removeRace, state } = useNextToGoRaces();
 </script>
 
 <template>
@@ -31,8 +16,9 @@
         </div>
 
         <NextToGoRaceList
-            :data="state.raceSummaries"
+            :data="availableRaces"
             :categoryIds="state.selectedFilters"
-            @removeNext="state.raceSummaries.shift()" />
+            :isLoading="state.isLoading"
+            @remove="removeRace" />
     </div>
 </template>

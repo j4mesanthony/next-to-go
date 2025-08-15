@@ -1,8 +1,9 @@
 <script setup>
-    import { computed, reactive, onMounted, onBeforeUnmount } from "vue";
+    import { computed } from "vue";
     import { RACING_CATEGORIES } from "../../../consts/consts.racingCategories";
+    import { useSecondTimer } from "../../../composables/useSecondTimer";
 
-    const emit = defineEmits(["removeNext"]);
+    const emit = defineEmits(["remove"]);
 
     const props = defineProps({
         data: {
@@ -14,21 +15,14 @@
             type: Array,
             default: () => [],
         },
+
+        isLoading: {
+            type: Boolean,
+            default: false,
+        },
     });
 
-    const state = reactive({
-        now: Date.now(),
-    });
-
-    let interval;
-    onMounted(startTimer);
-    onBeforeUnmount(() => clearInterval(interval));
-
-    function startTimer() {
-        interval = setInterval(() => {
-            state.now = Date.now();
-        }, 1000);
-    }
+    const { currentTime } = useSecondTimer();
 
     const raceListComputed = computed(() => {
         // id/name object categories for quick look-up when building out raceList.
@@ -69,13 +63,13 @@
     /**
      * Calculates the time difference in seconds between the current time and the provided start time.
      * This function is used instead implementing with raceListComputed to avoid triggering a re-render of the
-     * entire race list when the state.now updates.
+     * entire race list when the timer updates.
      * @param {Date} startTime - The start time of the race, as a Date object.
      * @returns {string} The time difference in seconds between now and the start time formatted as string with minute and/or second data.
      */
-    function getTimeDiff(startTime) {
-        const diffInSeconds = Math.floor((startTime - state.now) / 1000);
-        if (diffInSeconds <= -60) emit("removeNext");
+    function getTimeDiff(raceId, startTime) {
+        const diffInSeconds = Math.floor((startTime - currentTime.value) / 1000);
+        if (diffInSeconds <= -60) emit("remove", raceId);
         return diffInSeconds < 60 ? `${diffInSeconds}s` : `${Math.floor(diffInSeconds / 60)}m ${diffInSeconds % 60}s`;
     }
 </script>
@@ -92,12 +86,18 @@
                     {{ race.meeting_name }} R{{ race.race_number }} ({{ race.category }})
                 </div>
                 <div className="text-red-700" :data-test-id="`${race.race_id}-startTime`">
-                    {{ getTimeDiff(race.startTime) }}
+                    {{ getTimeDiff(race.race_id, race.startTime) }}
                 </div>
             </div>
         </transition-group>
 
-        <h1 v-if="!raceListComputed.length" data-test-id="noDataMsg" className="absolute top-2 pl-3">No races</h1>
+        <h2
+            v-if="!raceListComputed.length && !props.isLoading"
+            data-test-id="noDataMsg"
+            className="absolute top-2 pl-3">
+            No races
+        </h2>
+        <h2 v-if="props.isLoading" className="absolute top-2 pl-3">Loading data...</h2>
     </div>
 </template>
 
