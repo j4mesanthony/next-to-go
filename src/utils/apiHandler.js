@@ -2,8 +2,8 @@ export const apiHandler = {
     get(url) {
         const opts = { method: "GET" };
         return doApiCall(url, opts);
-    }
-}
+    },
+};
 
 const doApiCall = (url, options) => {
     const headers = {
@@ -11,22 +11,19 @@ const doApiCall = (url, options) => {
     };
 
     const opts = {
-    ...options,
-    headers: { ...headers, ...options.headers },
-  };
+        ...options,
+        headers: { ...headers, ...options.headers },
+    };
 
-  return fetch(url, opts)
-  .then((response) => responseHandler(response));
-}
+    return fetch(url, opts).then((response) => responseHandler(response));
+};
 
 const responseHandler = (response) => {
-  const { ok, status, url } = response;
+    const { ok, status, url } = response;
 
-  if (!ok) {
-    // TODO: Show error dialog
-    throw new Error(`HTTP Error! STATUS: ${status}, URL: ${url}`);
-  } 
-  else {
-    return response.json();
-  }
+    if (!ok) {
+        console.error(`HTTP Error! STATUS: ${status}, URL: ${url}`);
+    } else {
+        return response.json();
+    }
 };

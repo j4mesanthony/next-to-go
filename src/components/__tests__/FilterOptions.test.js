@@ -14,10 +14,10 @@ describe("FilterOptions.vue", () => {
             },
         });
 
-        expect(wrapper.get(`[data-test-id="1"]`));
-        expect(wrapper.get(`[data-test-id="2"]`));
-        expect(wrapper.get(`[data-test-id="select-1"]`));
-        expect(wrapper.get(`[data-test-id="select-2"]`));
+        expect(wrapper.get(`[data-test-id="1"]`)).toBeDefined();
+        expect(wrapper.get(`[data-test-id="2"]`)).toBeDefined();
+        expect(wrapper.get(`[data-test-id="select-1"]`)).toBeDefined();
+        expect(wrapper.get(`[data-test-id="select-2"]`)).toBeDefined();
     });
 
     it("selects all options if none selected in props on mount", () => {
@@ -48,8 +48,8 @@ describe("FilterOptions.vue", () => {
         });
 
         // Test that both options exist
-        expect(wrapper.get(`[data-test-id="1"]`));
-        expect(wrapper.get(`[data-test-id="2"]`));
+        expect(wrapper.get(`[data-test-id="1"]`)).toBeDefined();
+        expect(wrapper.get(`[data-test-id="2"]`)).toBeDefined();
 
         // Option #1 should be selected
         expect(wrapper.get(`[data-test-id="select-1"]`).element.checked).toBe(true);

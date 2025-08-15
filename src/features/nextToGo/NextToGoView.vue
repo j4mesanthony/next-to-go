@@ -32,7 +32,7 @@
 
         <NextToGoRaceList
             :data="state.raceSummaries"
-            :filters="state.selectedFilters"
+            :categoryIds="state.selectedFilters"
             @removeNext="state.raceSummaries.shift()" />
     </div>
 </template>

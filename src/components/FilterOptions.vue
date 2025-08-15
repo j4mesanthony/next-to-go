@@ -45,7 +45,7 @@
 
 <template>
     <div className="flex flex-row justify-between w-full px-3">
-        <div v-for="option in options" :key="option.id">
+        <div v-for="option in options" :key="option.id" className="flex flex-row gap-2">
             <label :for="option.name" :data-test-id="option.id">{{ option.name }}</label>
             <input
                 :id="option.name"

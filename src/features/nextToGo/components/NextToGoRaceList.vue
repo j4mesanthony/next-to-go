@@ -10,7 +10,7 @@
             default: () => [],
         },
 
-        filters: {
+        categoryIds: {
             type: Array,
             default: () => [],
         },
@@ -41,7 +41,7 @@
             const seconds = advertised_start.seconds;
             const startTime = new Date(seconds * 1000);
             const diffInSeconds = Math.floor((startTime - Date.now()) / 1000);
-            return diffInSeconds > -60 && props.filters.includes(category_id);
+            return diffInSeconds > -60 && props.categoryIds.includes(category_id);
         };
 
         const list = props.data
@@ -86,9 +86,12 @@
             <div
                 v-for="race in raceListComputed"
                 :key="race.race_id"
+                data-test-id="raceItem"
                 className="bg-white text-left text-sm p-3 flex flex-row gap-4 justify-between font-semibold">
-                <div className="uppercase">{{ race.meeting_name }} R{{ race.race_number }} ({{ race.category }})</div>
-                <div className="text-red-700">
+                <div className="uppercase" :data-test-id="race.race_id">
+                    {{ race.meeting_name }} R{{ race.race_number }} ({{ race.category }})
+                </div>
+                <div className="text-red-700" :data-test-id="`${race.race_id}-startTime`">
                     {{ getTimeDiff(race.startTime) }}
                 </div>
             </div>
