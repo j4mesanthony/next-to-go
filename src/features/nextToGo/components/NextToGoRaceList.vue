@@ -1,5 +1,6 @@
 <script setup>
     import { computed, reactive, onMounted, onBeforeUnmount } from "vue";
+    import { RACING_CATEGORIES } from "../../../consts/consts.racingCategories";
 
     const emit = defineEmits(["removeNext"]);
 
@@ -30,6 +31,12 @@
     }
 
     const raceListComputed = computed(() => {
+        // id/name object categories for quick look-up when building out raceList.
+        const categories = Object.values(RACING_CATEGORIES).reduce((acc, n) => {
+            acc[n.id] = n.name;
+            return acc;
+        }, {});
+
         const _byLessThanMinuteOldOfValidCategory = ({ advertised_start, category_id }) => {
             const seconds = advertised_start.seconds;
             const startTime = new Date(seconds * 1000);
@@ -51,7 +58,7 @@
                     race_id: x.race_id,
                     meeting_name: x.meeting_name,
                     race_number: x.race_number,
-                    category_id: x.category_id,
+                    category: categories[x.category_id],
                     startTime,
                 };
             });
@@ -80,7 +87,7 @@
                 v-for="race in raceListComputed"
                 :key="race.race_id"
                 className="bg-white text-left text-sm p-3 flex flex-row gap-4 justify-between font-semibold">
-                <div className="uppercase">{{ race.meeting_name }} R{{ race.race_number }}</div>
+                <div className="uppercase">{{ race.meeting_name }} R{{ race.race_number }} ({{ race.category }})</div>
                 <div className="text-red-700">
                     {{ getTimeDiff(race.startTime) }}
                 </div>

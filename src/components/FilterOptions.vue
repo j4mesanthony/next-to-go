@@ -31,12 +31,14 @@
 </script>
 
 <template>
-    <div v-for="option in options" :key="option.id">
-        <label :for="option.name">{{ option.name }}</label>
-        <input
-            :id="option.name"
-            type="checkbox"
-            :checked="modelValue.includes(option.id)"
-            @click="(e) => setFilters(e, option.id)" />
+    <div className="flex flex-row justify-between w-full px-3">
+        <div v-for="option in options" :key="option.id">
+            <label :for="option.name">{{ option.name }}</label>
+            <input
+                :id="option.name"
+                type="checkbox"
+                :checked="modelValue.includes(option.id)"
+                @click="(e) => setFilters(e, option.id)" />
+        </div>
     </div>
 </template>
