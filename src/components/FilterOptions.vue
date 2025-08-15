@@ -4,11 +4,13 @@
     const emit = defineEmits(["update:modelValue"]);
 
     const { modelValue, options } = defineProps({
+        // The currently selected option ids.
         modelValue: {
             type: Array,
             required: true,
         },
 
+        // The list of available filter options. Defaults to an empty array.
         options: {
             type: Array,
             default: () => [],
@@ -17,6 +19,12 @@
 
     onMounted(setOptionsIfEmptySelection);
 
+    /**
+     * Sets the modelValue to all available option IDs if the current selection is empty.
+     * Emits an "update:modelValue" event with the list of all option IDs.
+     * This function ensures that at least one option is always selected,
+     * and for resetting the selection to include all options when none are selected.
+     */
     function setOptionsIfEmptySelection() {
         if (!modelValue.length) {
             emit(

@@ -12,14 +12,19 @@ export function useNextToGoRaces() {
         selectedFilters: [],
     });
 
-    onMounted(getRaces);
+    onMounted(getNextRaces);
 
     const availableRaces = computed(() => state.raceSummaries.slice(0, RACE_COUNT_THRESHOLD));
 
-    async function getRaces() {
+    /**
+     * Asynchronously fetches the next n races (default is 10) and updates the state with the race summaries.
+     * Sets the loading state before and after the API call.
+     * @returns {Promise<void>} Resolves when the race summaries have been fetched and state updated.
+     */
+    async function getNextRaces() {
         state.isLoading = true;
         try {
-            const { data } = await API.getNextNRaces();
+            const { data } = await API.getNextRaces();
             const { race_summaries } = data;
             state.raceSummaries = Object.values(race_summaries);
         } finally {
@@ -27,14 +32,19 @@ export function useNextToGoRaces() {
         }
     }
 
+    /**
+     * Removes a race from the races list by its race_id.
+     * @param {string|number} raceId - The unique identifier of the race to remove.
+     */
     function removeRace(raceId) {
         state.raceSummaries = state.raceSummaries.filter(({ race_id }) => race_id !== raceId);
     }
 
+    // Once our list of races drops below threshold, fetch new list from API.
     watch(
         () => availableRaces.value.length,
         (len) => {
-            if (len < RACE_COUNT_THRESHOLD) getRaces();
+            if (len < RACE_COUNT_THRESHOLD) getNextRaces();
         }
     );
 

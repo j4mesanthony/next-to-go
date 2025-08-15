@@ -6,16 +6,19 @@
     const emit = defineEmits(["remove"]);
 
     const props = defineProps({
+        // List of race data to display. Defaults to an empty array.
         data: {
             type: Array,
             default: () => [],
         },
 
+        // List of category IDs to filter races. Defaults to an empty array.
         categoryIds: {
             type: Array,
             default: () => [],
         },
 
+        // Indicates if the race list is currently loading. Defaults to false.
         isLoading: {
             type: Boolean,
             default: false,
@@ -24,6 +27,12 @@
 
     const { currentTime } = useSecondTimer();
 
+    /**
+     * Computes a filtered and formatted list of upcoming races.
+     * - Filters out races that started more than 60 seconds ago or are not in the allowed categories.
+     * - Sorts the races by their advertised start time in ascending order.
+     * @returns {Array<Object>} List of upcoming races with relevant details for presentation.
+     */
     const raceListComputed = computed(() => {
         // id/name object categories for quick look-up when building out raceList.
         const categories = Object.values(RACING_CATEGORIES).reduce((acc, n) => {
