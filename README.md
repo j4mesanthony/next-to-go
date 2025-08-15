@@ -1,14 +1,13 @@
-
 # Next To Go
 
 Next To Go is a modern web application built with Vue 3 and Vite, designed to display and filter upcoming racing events. It features a clean UI, fast performance, and a modular codebase for easy maintenance and extension.
 
 ## Features
 
-- **Live Next To Go Races:** View a list of upcoming races with real-time updates.
-- **Category Filtering:** Filter races by racing categories (e.g., thoroughbred, harness, greyhound).
-- **Responsive UI:** Built with Tailwind CSS for a mobile-friendly experience.
-- **Modular Architecture:** Organized with Vue components, composables, and feature-based folders.
+-   **Live Next To Go Races:** View a list of upcoming races with real-time updates.
+-   **Category Filtering:** Filter races by racing categories (e.g., thoroughbred, harness, greyhound).
+-   **Responsive UI:** Built with Tailwind CSS for a mobile-friendly experience.
+-   **Modular Architecture:** Organized with Vue components, composables, and feature-based folders.
 
 ## Project Structure
 
@@ -38,21 +37,22 @@ package.json             # Project metadata and scripts
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18 or higher recommended)
-- [npm](https://www.npmjs.com/) (comes with Node.js)
+-   [Node.js](https://nodejs.org/) (v18 or higher recommended)
+-   [npm](https://www.npmjs.com/) (comes with Node.js)
 
 ### Installation
 
 1. **Clone the repository:**
-	 ```sh
-	 git clone https://github.com/j4mesanthony/next-to-go.git
-	 cd next-to-go
-	 ```
+
+    ```sh
+    git clone https://github.com/j4mesanthony/next-to-go.git
+    cd next-to-go
+    ```
 
 2. **Install dependencies:**
-	 ```sh
-	 npm install
-	 ```
+    ```sh
+    npm install
+    ```
 
 ### Running the Application
 
@@ -93,6 +93,21 @@ or
 ```sh
 npm run test
 ```
+
+### Linting
+
+This project uses [ESLint](https://eslint.org/) for code linting.
+
+To check for linting errors, run:
+
+```sh
+npm run lint
+```
+
+#### ESLint Configuration
+
+-   ESLint is configured using the `eslint.config.js` file with support for JavaScript and Vue files.
+-   Uses the recommended rules from `@eslint/js` and `eslint-plugin-vue`.
 
 ---
 
