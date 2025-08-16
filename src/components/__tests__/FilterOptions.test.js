@@ -52,10 +52,10 @@ describe("FilterOptions.vue", () => {
         expect(wrapper.get(`[data-test-id="2"]`)).toBeDefined();
 
         // Option #1 should be selected
-        expect(wrapper.get(`[data-test-id="select-1"]`).element.checked).toBe(true);
+        expect(wrapper.get(`[data-test-id="select-1"]`).classes()).toContain("isActive");
 
         // Option #2 should not be selected
-        expect(wrapper.get(`[data-test-id="select-2"]`).element.checked).toBe(false);
+        expect(wrapper.get(`[data-test-id="select-2"]`).classes()).not.toContain("isActive");
 
         // Click Option #2 and test that it is now selected
         await wrapper.get(`[data-test-id="select-2"]`).trigger("click");

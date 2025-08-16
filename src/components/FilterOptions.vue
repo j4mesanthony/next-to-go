@@ -52,14 +52,14 @@
 </script>
 
 <template>
-    <div className="flex flex-row w-full justify-end gap-1">
+    <div className="flex flex-row w-full justify-end gap-1 sm:border-l-2 border-white sm:pl-2 sm:ml-1">
         <button
             v-for="option in options"
             :key="option.id"
             :data-test-id="`select-${option.id}`"
             @click="(e) => setFilters(e, option.id)"
-            :className="`p-3 h-13 grow first:rounded-tl-lg first:rounded-bl-lg last:rounded-tr-lg last:rounded-br-lg text-white text-sm cursor-pointer uppercase font-semibold ${
-                modelValue.includes(option.id) ? 'bg-orange-600 hover:bg-orange-400' : 'bg-gray-300'
+            :className="`p-3 h-12 grow first:rounded-tl-lg first:rounded-bl-lg last:rounded-tr-lg last:rounded-br-lg text-white text-sm cursor-pointer uppercase font-semibold ${
+                modelValue.includes(option.id) ? 'isActive bg-orange-600 hover:bg-orange-400' : 'bg-gray-300'
             }`">
             <span :data-test-id="option.id">{{ option.name }}</span>
         </button>

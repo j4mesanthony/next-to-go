@@ -105,4 +105,35 @@ describe("NextToGoRaceList.vue", () => {
 
         expect(wrapper.findAll(`[data-test-id="raceItem"]`)).toHaveLength(1);
     });
+
+    it("renders correct maximum amount of races", () => {
+        const data = [
+            {
+                race_id: "31057539-361f-47f4-bf13-e53347f6f037",
+                race_name: "BLACKADDER RACING",
+                race_number: 5,
+                meeting_name: "Oamaru",
+                category_id: "4a2788f8-e825-4d36-9894-efd4baf1cfae", // Horse
+                advertised_start: { seconds: Math.floor(Date.now() / 1000) + 60 },
+            },
+            {
+                race_id: "31057539-361f-47f4-bf13-e53347f6f321",
+                race_name: "BLACKADDER RACING",
+                race_number: 9,
+                meeting_name: "Healesville",
+                category_id: "4a2788f8-e825-4d36-9894-efd4baf1cfae", // Horse
+                advertised_start: { seconds: Math.floor(Date.now() / 1000) + 60 },
+            },
+        ];
+
+        const wrapper = mount(NextToGoRaceList, {
+            props: {
+                data,
+                max: 1,
+                categoryIds: ["4a2788f8-e825-4d36-9894-efd4baf1cfae"],
+            },
+        });
+
+        expect(wrapper.findAll(`[data-test-id="raceItem"]`)).toHaveLength(1);
+    });
 });
