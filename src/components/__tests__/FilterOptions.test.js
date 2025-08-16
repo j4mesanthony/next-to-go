@@ -23,7 +23,7 @@ describe("FilterOptions.vue", () => {
         expect(emitted[0]).toEqual([[1, 2]]);
     });
 
-    it("toggles selection on click", async () => {
+    it("selects option on click", async () => {
         const wrapper = mount(FilterOptions, { props: { modelValue: [1], options } });
 
         expect(wrapper.get("[data-test-id='select-1']").classes()).toContain("isActive");
@@ -31,5 +31,16 @@ describe("FilterOptions.vue", () => {
 
         await wrapper.get("[data-test-id='select-2']").trigger("click");
         expect(wrapper.emitted("update:modelValue")[0]).toEqual([[1, 2]]);
+    });
+
+    it("deselects option on click", async () => {
+        const wrapper = mount(FilterOptions, { props: { modelValue: [1, 2], options } });
+
+        options.forEach((opt) => {
+            expect(wrapper.get(`[data-test-id='select-${opt.id}']`).classes()).toContain("isActive");
+        });
+
+        await wrapper.get("[data-test-id='select-1']").trigger("click");
+        expect(wrapper.emitted("update:modelValue")[0]).toEqual([[2]]);
     });
 });

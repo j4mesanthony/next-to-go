@@ -37,6 +37,15 @@ describe("NextToGoRaceList.vue", () => {
         );
     });
 
+    it("shows correct message when no data", () => {
+        const data = [];
+        const wrapper = mount(NextToGoRaceList, { props: { data, max: 1, categoryIds: [horseCategoryId] } });
+
+        // Max data set to 1 should the second race should not be shown
+        expect(wrapper.get('[data-test-id="noDataMsg"]')).toBeDefined();
+        expect(wrapper.get('[data-test-id="noDataMsg"]').text()).toBe("No races");
+    });
+
     it("filters by category", () => {
         const data = [
             base({ race_id: "b70a4404-a8c5-4360-b289-d1644547ee89", category_id: horseCategoryId }),
@@ -48,7 +57,7 @@ describe("NextToGoRaceList.vue", () => {
         expect(wrapper.findAll('[data-test-id="raceItem"]').length).toBe(1);
     });
 
-    it("respects max prop", () => {
+    it("displays races up to max prop value", () => {
         const data = [
             base({ race_id: "7a8cd994-e6d0-4220-9a00-7908a76dc098" }),
             base({ race_id: "b70a4404-a8c5-4360-b289-d1644547ee89" }),

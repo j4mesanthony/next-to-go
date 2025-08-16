@@ -38,7 +38,7 @@ export function useNextToGoRaces() {
         try {
             const { data } = await API.getNextRaces();
             const { race_summaries } = data;
-            // Populate raceSummaries with new races from API resonse.
+            // Populate raceSummaries with any new races from API response (no duplicates).
             const existingIds = state.raceSummaries.map(({ race_id }) => race_id);
             const newRaces = Object.values(race_summaries).filter((x) => !existingIds.includes(x.race_id));
             state.raceSummaries = [...state.raceSummaries, ...newRaces];
