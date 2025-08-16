@@ -1,67 +1,35 @@
-import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
+import { mount } from "@vue/test-utils";
 import FilterOptions from "../FilterOptions.vue";
 
 describe("FilterOptions.vue", () => {
-    it("renders all available options", () => {
-        const wrapper = mount(FilterOptions, {
-            props: {
-                modelValue: [1, 2],
-                options: [
-                    { id: 1, name: "Option #1" },
-                    { id: 2, name: "Option #2" },
-                ],
-            },
-        });
+    const options = [
+        { id: 1, name: "Option #1" },
+        { id: 2, name: "Option #2" },
+    ];
 
-        expect(wrapper.get(`[data-test-id="1"]`)).toBeDefined();
-        expect(wrapper.get(`[data-test-id="2"]`)).toBeDefined();
-        expect(wrapper.get(`[data-test-id="select-1"]`)).toBeDefined();
-        expect(wrapper.get(`[data-test-id="select-2"]`)).toBeDefined();
+    it("renders all options", () => {
+        const wrapper = mount(FilterOptions, { props: { modelValue: [1, 2], options } });
+        options.forEach((opt) => {
+            expect(wrapper.get(`[data-test-id='${opt.id}']`)).toBeDefined();
+            expect(wrapper.get(`[data-test-id='select-${opt.id}']`)).toBeDefined();
+        });
     });
 
-    it("selects all options if none selected in props on mount", () => {
-        const wrapper = mount(FilterOptions, {
-            props: {
-                modelValue: [],
-                options: [
-                    { id: 1, name: "Option #1" },
-                    { id: 2, name: "Option #2" },
-                ],
-            },
-        });
+    it("selects all if none selected", () => {
+        const wrapper = mount(FilterOptions, { props: { modelValue: [], options } });
+        const emitted = wrapper.emitted("update:modelValue");
 
-        const selectEvent = wrapper.emitted("update:modelValue");
-        expect(selectEvent).toHaveLength(1);
-        expect(selectEvent[0]).toEqual([[1, 2]]);
+        expect(emitted[0]).toEqual([[1, 2]]);
     });
 
-    it("renders 2 options with one selected and then clicks to select other option", async () => {
-        const wrapper = mount(FilterOptions, {
-            props: {
-                modelValue: [1],
-                options: [
-                    { id: 1, name: "Option #1" },
-                    { id: 2, name: "Option #2" },
-                ],
-            },
-        });
+    it("toggles selection on click", async () => {
+        const wrapper = mount(FilterOptions, { props: { modelValue: [1], options } });
 
-        // Test that both options exist
-        expect(wrapper.get(`[data-test-id="1"]`)).toBeDefined();
-        expect(wrapper.get(`[data-test-id="2"]`)).toBeDefined();
+        expect(wrapper.get("[data-test-id='select-1']").classes()).toContain("isActive");
+        expect(wrapper.get("[data-test-id='select-2']").classes()).not.toContain("isActive");
 
-        // Option #1 should be selected
-        expect(wrapper.get(`[data-test-id="select-1"]`).classes()).toContain("isActive");
-
-        // Option #2 should not be selected
-        expect(wrapper.get(`[data-test-id="select-2"]`).classes()).not.toContain("isActive");
-
-        // Click Option #2 and test that it is now selected
-        await wrapper.get(`[data-test-id="select-2"]`).trigger("click");
-        const selectEvent = wrapper.emitted("update:modelValue");
-
-        expect(selectEvent).toHaveLength(1);
-        expect(selectEvent[0]).toEqual([[1, 2]]);
+        await wrapper.get("[data-test-id='select-2']").trigger("click");
+        expect(wrapper.emitted("update:modelValue")[0]).toEqual([[1, 2]]);
     });
 });

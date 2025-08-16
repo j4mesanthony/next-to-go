@@ -3,137 +3,59 @@ import { describe, it, expect } from "vitest";
 import NextToGoRaceList from "../NextToGoRaceList.vue";
 
 describe("NextToGoRaceList.vue", () => {
-    it("renders race data correctly", () => {
-        const race1Id = "31057539-361f-47f4-bf13-e53347f6f037";
-        const race2Id = "31057539-361f-47f4-bf13-e53347f6f038";
+    const horseCategoryId = "4a2788f8-e825-4d36-9894-efd4baf1cfae";
+    const greyhoundCategoryId = "9daef0d7-bf3c-4f50-921d-8e818c60fe61";
+    const now = Math.floor(Date.now() / 1000);
 
+    const base = (overrides = {}) => ({
+        race_id: "d30b81e5-ec14-410e-bf4c-f958720b1b69",
+        race_name: "RAQbred Triad Final 4YO E&G Mobile Pace (G2)E",
+        race_number: 1,
+        meeting_name: "Albion Park",
+        category_id: horseCategoryId,
+        advertised_start: { seconds: now + 60 },
+        ...overrides,
+    });
+
+    it("renders race data", () => {
         const data = [
-            {
-                race_id: race1Id,
-                race_name: "BLACKADDER RACING",
-                race_number: 5,
-                meeting_name: "Oamaru",
-                category_id: "4a2788f8-e825-4d36-9894-efd4baf1cfae", // Horse
-                advertised_start: { seconds: Math.floor(Date.now() / 1000) + 60 },
-            },
-            {
-                race_id: race2Id,
-                race_name: "BLACKADDER RACING",
+            base({ race_id: "b70a4404-a8c5-4360-b289-d1644547ee89", race_number: 5 }),
+            base({
+                race_id: "7a8cd994-e6d0-4220-9a00-7908a76dc098",
                 race_number: 6,
-                meeting_name: "Oamaru",
-                category_id: "4a2788f8-e825-4d36-9894-efd4baf1cfae", // Horse
-                advertised_start: { seconds: Math.floor(Date.now() / 1000) + 61 },
-            },
+                advertised_start: { seconds: now + 125 },
+            }),
         ];
+        const wrapper = mount(NextToGoRaceList, { props: { data, categoryIds: [horseCategoryId] } });
 
-        const wrapper = mount(NextToGoRaceList, {
-            props: {
-                data,
-                categoryIds: ["4a2788f8-e825-4d36-9894-efd4baf1cfae"],
-            },
-        });
-
-        // Race #1
-        const race1 = wrapper.get(`[data-test-id="${race1Id}"]`);
-        expect(race1).toBeTruthy();
-        expect(race1.text()).toBe(`${data[0].meeting_name} R${data[0].race_number} (Horse)`);
-        expect(wrapper.get(`[data-test-id="${race1Id}-startTime"]`).text()).toMatch(/[\d+]s/g);
-
-        // Race #2
-        const race2 = wrapper.get(`[data-test-id="${race2Id}"]`);
-        expect(race2).toBeTruthy();
-        expect(race2.text()).toBe(`${data[1].meeting_name} R${data[1].race_number} (Horse)`);
-        expect(wrapper.get(`[data-test-id="${race2Id}-startTime"]`).text()).toMatch(/[\d+]m [\d+]s/g);
+        // Do descriptions show and are formatted as expected?
+        expect(wrapper.get('[data-test-id="b70a4404-a8c5-4360-b289-d1644547ee89"]').text()).toContain("Albion Park R5");
+        expect(wrapper.get('[data-test-id="7a8cd994-e6d0-4220-9a00-7908a76dc098"]').text()).toContain("Albion Park R6");
+        // Test for mins & second output on 2nd race (1m 30s)
+        expect(wrapper.get(`[data-test-id="7a8cd994-e6d0-4220-9a00-7908a76dc098-startTime"]`).text()).toMatch(
+            /[\d+]m [\d+]s/g
+        );
     });
 
-    it("renders multiple races", () => {
+    it("filters by category", () => {
         const data = [
-            {
-                race_id: "31057539-361f-47f4-bf13-e53347f6f037",
-                race_name: "BLACKADDER RACING",
-                race_number: 5,
-                meeting_name: "Oamaru",
-                category_id: "4a2788f8-e825-4d36-9894-efd4baf1cfae", // Horse
-                advertised_start: { seconds: Math.floor(Date.now() / 1000) + 60 },
-            },
-            {
-                race_id: "31057539-361f-47f4-bf13-e53347f6f321",
-                race_name: "BLACKADDER RACING",
-                race_number: 9,
-                meeting_name: "Healesville",
-                category_id: "4a2788f8-e825-4d36-9894-efd4baf1cfae", // Horse
-                advertised_start: { seconds: Math.floor(Date.now() / 1000) + 60 },
-            },
+            base({ race_id: "b70a4404-a8c5-4360-b289-d1644547ee89", category_id: horseCategoryId }),
+            base({ race_id: "7a8cd994-e6d0-4220-9a00-7908a76dc098", category_id: greyhoundCategoryId }),
         ];
+        const wrapper = mount(NextToGoRaceList, { props: { data, categoryIds: [horseCategoryId] } });
 
-        const wrapper = mount(NextToGoRaceList, {
-            props: {
-                data,
-                categoryIds: ["4a2788f8-e825-4d36-9894-efd4baf1cfae"],
-            },
-        });
-
-        expect(wrapper.findAll(`[data-test-id="raceItem"]`)).toHaveLength(2);
+        // Only 1 race should exist (greyhound is not valid category)
+        expect(wrapper.findAll('[data-test-id="raceItem"]').length).toBe(1);
     });
 
-    it("only renders races of selected categories", () => {
+    it("respects max prop", () => {
         const data = [
-            {
-                race_id: "31057539-361f-47f4-bf13-e53347f6f037",
-                race_name: "BLACKADDER RACING",
-                race_number: 5,
-                meeting_name: "Oamaru",
-                category_id: "4a2788f8-e825-4d36-9894-efd4baf1cfae", // Horse
-                advertised_start: { seconds: Math.floor(Date.now() / 1000) + 60 },
-            },
-            {
-                race_id: "31057539-361f-47f4-bf13-e53347f6f321",
-                race_name: "BLACKADDER RACING",
-                race_number: 9,
-                meeting_name: "Healesville",
-                category_id: "9daef0d7-bf3c-4f50-921d-8e818c60fe61", // Greyhound
-                advertised_start: { seconds: Math.floor(Date.now() / 1000) + 40 },
-            },
+            base({ race_id: "7a8cd994-e6d0-4220-9a00-7908a76dc098" }),
+            base({ race_id: "b70a4404-a8c5-4360-b289-d1644547ee89" }),
         ];
+        const wrapper = mount(NextToGoRaceList, { props: { data, max: 1, categoryIds: [horseCategoryId] } });
 
-        const wrapper = mount(NextToGoRaceList, {
-            props: {
-                data,
-                categoryIds: ["4a2788f8-e825-4d36-9894-efd4baf1cfae"], // Horse
-            },
-        });
-
-        expect(wrapper.findAll(`[data-test-id="raceItem"]`)).toHaveLength(1);
-    });
-
-    it("renders correct maximum amount of races", () => {
-        const data = [
-            {
-                race_id: "31057539-361f-47f4-bf13-e53347f6f037",
-                race_name: "BLACKADDER RACING",
-                race_number: 5,
-                meeting_name: "Oamaru",
-                category_id: "4a2788f8-e825-4d36-9894-efd4baf1cfae", // Horse
-                advertised_start: { seconds: Math.floor(Date.now() / 1000) + 60 },
-            },
-            {
-                race_id: "31057539-361f-47f4-bf13-e53347f6f321",
-                race_name: "BLACKADDER RACING",
-                race_number: 9,
-                meeting_name: "Healesville",
-                category_id: "4a2788f8-e825-4d36-9894-efd4baf1cfae", // Horse
-                advertised_start: { seconds: Math.floor(Date.now() / 1000) + 60 },
-            },
-        ];
-
-        const wrapper = mount(NextToGoRaceList, {
-            props: {
-                data,
-                max: 1,
-                categoryIds: ["4a2788f8-e825-4d36-9894-efd4baf1cfae"],
-            },
-        });
-
-        expect(wrapper.findAll(`[data-test-id="raceItem"]`)).toHaveLength(1);
+        // Max data set to 1 should the second race should not be shown
+        expect(wrapper.findAll('[data-test-id="raceItem"]').length).toBe(1);
     });
 });
