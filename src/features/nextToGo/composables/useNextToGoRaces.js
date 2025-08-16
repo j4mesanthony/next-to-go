@@ -19,7 +19,7 @@ export function useNextToGoRaces() {
      */
     const availableRaces = computed(() => {
         const _byLessThanMinuteOld = ({ advertised_start }) => {
-            const seconds = advertised_start.seconds;
+            const { seconds } = advertised_start;
             const startTime = new Date(seconds * 1000);
             const diffInSeconds = Math.floor((startTime - Date.now()) / 1000);
             return diffInSeconds >= -60;
@@ -38,6 +38,7 @@ export function useNextToGoRaces() {
         try {
             const { data } = await API.getNextRaces();
             const { race_summaries } = data;
+            // Populate raceSummaries with new races from API resonse.
             const existingIds = state.raceSummaries.map(({ race_id }) => race_id);
             const newRaces = Object.values(race_summaries).filter((x) => !existingIds.includes(x.race_id));
             state.raceSummaries = [...state.raceSummaries, ...newRaces];
