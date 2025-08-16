@@ -1,5 +1,4 @@
 <script setup>
-    import FilterOptions from "../../components/FilterOptions.vue";
     import NextToGoRaceList from "./components/NextToGoRaceList.vue";
     import { useNextToGoRaces } from "./composables/useNextToGoRaces";
 
@@ -13,7 +12,7 @@
             <h1
                 className="h-12 bg-gray-800 text-white text-md p-3 font-bold uppercase grow w-full sm:max-w-2/3 text-left flex flex-row justify-between">
                 Next to go racing
-                <img v-if="isLoading" src="../../assets/spinner.svg" alt="Loading..." className="animate-spin" />
+                <LoadingSpinner v-if="isLoading" />
             </h1>
             <FilterOptions v-model="selectedFilters" :options="RACING_CATEGORIES_LIST" />
         </div>
