@@ -1,6 +1,6 @@
 <script setup>
     import { computed } from "vue";
-    import { RACING_CATEGORIES } from "../../../consts/consts.racingCategories";
+    import { RACING_CATEGORIES_LIST } from "../../../consts/consts.racingCategories";
     import { useSecondTimer } from "../../../composables/useSecondTimer";
 
     const emit = defineEmits(["remove"]);
@@ -12,16 +12,16 @@
             default: () => [],
         },
 
+        // Maximum numer of items in list
+        max: {
+            type: Number,
+            default: 5,
+        },
+
         // List of category IDs to filter races. Defaults to an empty array.
         categoryIds: {
             type: Array,
             default: () => [],
-        },
-
-        // Indicates if the race list is currently loading. Defaults to false.
-        isLoading: {
-            type: Boolean,
-            default: false,
         },
     });
 
@@ -35,21 +35,14 @@
      */
     const raceListComputed = computed(() => {
         // id/name object categories for quick look-up when building out raceList.
-        const categories = Object.values(RACING_CATEGORIES).reduce((acc, n) => {
+        const categories = RACING_CATEGORIES_LIST.reduce((acc, n) => {
             acc[n.id] = n.name;
             return acc;
         }, {});
 
-        const _byLessThanMinuteOldOfValidCategory = ({ advertised_start, category_id }) => {
-            const seconds = advertised_start.seconds;
-            const startTime = new Date(seconds * 1000);
-            const diffInSeconds = Math.floor((startTime - Date.now()) / 1000);
-            return diffInSeconds >= -60 && props.categoryIds.includes(category_id);
-        };
-
         const list = props.data
             // We don't want old or irrelevant races
-            .filter(_byLessThanMinuteOldOfValidCategory)
+            .filter(({ category_id }) => props.categoryIds.includes(category_id))
             // Sort races by start time ASCENDING
             .sort((a, b) => a.advertised_start.seconds - b.advertised_start.seconds)
             // Pull out the data we need to present and include formatted startTime to be used in getTimeDiff call.
@@ -66,7 +59,8 @@
                 };
             });
 
-        return list;
+        // Only show up to max amount set in props
+        return list.slice(0, props.max);
     });
 
     /**
@@ -84,39 +78,20 @@
 </script>
 
 <template>
-    <div className="flex flex-col gap-1 relative">
-        <transition-group name="slide-left">
-            <div
-                v-for="race in raceListComputed"
-                :key="race.race_id"
-                data-test-id="raceItem"
-                className="bg-white text-left text-sm p-3 flex flex-row gap-4 justify-between font-semibold">
-                <div className="uppercase" :data-test-id="race.race_id">
-                    {{ race.meeting_name }} R{{ race.race_number }} ({{ race.category }})
-                </div>
-                <div className="text-red-700" :data-test-id="`${race.race_id}-startTime`">
-                    {{ getTimeDiff(race.race_id, race.startTime) }}
-                </div>
+    <div className="relative">
+        <div
+            v-for="race in raceListComputed"
+            :key="race.race_id"
+            data-test-id="raceItem"
+            className="bg-white text-left text-sm p-3 flex flex-row gap-4 justify-between font-semibold mb-1">
+            <div className="uppercase" :data-test-id="race.race_id">
+                {{ race.meeting_name }} R{{ race.race_number }} ({{ race.category }})
             </div>
-        </transition-group>
+            <div className="text-red-700 text-right" :data-test-id="`${race.race_id}-startTime`">
+                {{ getTimeDiff(race.race_id, race.startTime) }}
+            </div>
+        </div>
 
-        <h2
-            v-if="!raceListComputed.length && !props.isLoading"
-            data-test-id="noDataMsg"
-            className="absolute top-2 pl-3">
-            No races
-        </h2>
-        <h2 v-if="props.isLoading" className="absolute top-2 pl-3">Loading data...</h2>
+        <h2 v-if="!raceListComputed.length" data-test-id="noDataMsg" className="absolute top-2 pl-3">No races</h2>
     </div>
 </template>
-
-<style scoped>
-    .slide-left-leave-active {
-        transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
-    }
-
-    .slide-left-leave-to {
-        transform: translateX(-100%);
-        opacity: 0;
-    }
-</style>

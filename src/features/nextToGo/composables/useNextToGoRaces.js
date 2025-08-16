@@ -1,10 +1,9 @@
 import { nextToGo as API } from "../apis/api.nextToGo";
-import { onMounted, reactive, computed, watch } from "vue";
-import { RACING_CATEGORIES } from "../../../consts/consts.racingCategories";
+import { onMounted, reactive, computed, watch, toRefs } from "vue";
+import { RACING_CATEGORIES_LIST } from "../../../consts/consts.racingCategories";
 
 export function useNextToGoRaces() {
     const RACE_COUNT_THRESHOLD = 5;
-    const AVAILABLE_FILTERS = Object.values(RACING_CATEGORIES);
 
     const state = reactive({
         isLoading: false,
@@ -14,10 +13,23 @@ export function useNextToGoRaces() {
 
     onMounted(getNextRaces);
 
-    const availableRaces = computed(() => state.raceSummaries.slice(0, RACE_COUNT_THRESHOLD));
+    /**
+     * Only includes races whose advertised start time is no more than 60 seconds in the past.
+     * @returns {Array<Object>} List of race summaries
+     */
+    const availableRaces = computed(() => {
+        const _byLessThanMinuteOld = ({ advertised_start }) => {
+            const seconds = advertised_start.seconds;
+            const startTime = new Date(seconds * 1000);
+            const diffInSeconds = Math.floor((startTime - Date.now()) / 1000);
+            return diffInSeconds >= -60;
+        };
+
+        return state.raceSummaries.filter(_byLessThanMinuteOld);
+    });
 
     /**
-     * Asynchronously fetches the next n races (default is 10) and updates the state with the race summaries.
+     * Fetches the next n races (default is 10) and updates the state with the race summaries.
      * Sets the loading state before and after the API call.
      * @returns {Promise<void>} Resolves when the race summaries have been fetched and state updated.
      */
@@ -26,7 +38,9 @@ export function useNextToGoRaces() {
         try {
             const { data } = await API.getNextRaces();
             const { race_summaries } = data;
-            state.raceSummaries = Object.values(race_summaries);
+            const existingIds = state.raceSummaries.map(({ race_id }) => race_id);
+            const newRaces = Object.values(race_summaries).filter((x) => !existingIds.includes(x.race_id));
+            state.raceSummaries = [...state.raceSummaries, ...newRaces];
         } finally {
             state.isLoading = false;
         }
@@ -48,10 +62,14 @@ export function useNextToGoRaces() {
         }
     );
 
+    const { isLoading, selectedFilters } = toRefs(state);
+
     return {
-        AVAILABLE_FILTERS,
+        RACING_CATEGORIES_LIST,
+        RACE_COUNT_THRESHOLD,
         availableRaces,
+        isLoading,
         removeRace,
-        state,
+        selectedFilters,
     };
 }
