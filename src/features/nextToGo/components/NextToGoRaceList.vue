@@ -41,7 +41,7 @@
         }, {});
 
         const list = props.data
-            // We don't want old or irrelevant races
+            // Only show relevant categories
             .filter(({ category_id }) => props.categoryIds.includes(category_id))
             // Sort races by start time ASCENDING
             .sort((a, b) => a.advertised_start.seconds - b.advertised_start.seconds)
