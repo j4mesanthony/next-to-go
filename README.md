@@ -14,8 +14,10 @@ src/
   App.vue                        # Main application component
   main.js                        # App entry point
   style.css                      # Global styles (Tailwind CSS)
-  components/                    # Shared UI components
+  components/                    # Global UI components
     FilterOptions.vue            # Category filter UI
+    LoadingSpinner.vue           # LoadingSpinner UI
+    index.js                     # Barrel-exporter for global components
     __tests__/
       FilterOptions.test.js      # Unit tests for FilterOptions
   composables/
