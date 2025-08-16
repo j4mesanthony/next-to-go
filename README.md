@@ -1,6 +1,6 @@
 # Next To Go
 
-Next To Go is a modern web application built with Vue 3 and Vite, designed to display and filter upcoming racing events.
+Next To Go is a simple web page built with Vue 3 and Vite, designed to display and filter upcoming racing events.
 
 ## Features
 
