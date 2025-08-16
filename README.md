@@ -14,7 +14,9 @@ src/
   App.vue                        # Main application component
   main.js                        # App entry point
   style.css                      # Global styles (Tailwind CSS)
-  components/                    # Global UI components
+  assets/
+    spinner.svg                  # Loading spinner image
+  components/
     FilterOptions.vue            # Category filter UI
     LoadingSpinner.vue           # LoadingSpinner UI
     index.js                     # Barrel-exporter for global components
