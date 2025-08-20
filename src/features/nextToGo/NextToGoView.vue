@@ -2,7 +2,7 @@
     import NextToGoRaceList from "./components/NextToGoRaceList.vue";
     import { useNextToGoRaces } from "./composables/useNextToGoRaces";
 
-    const { RACING_CATEGORIES_LIST, RACE_COUNT_THRESHOLD, availableRaces, isLoading, removeRace, selectedFilters } =
+    const { RACING_CATEGORIES_LIST, threshold, availableRaces, isLoading, removeRace, selectedFilters } =
         useNextToGoRaces();
 </script>
 
@@ -17,10 +17,6 @@
             <FilterOptions v-model="selectedFilters" :options="RACING_CATEGORIES_LIST" />
         </div>
 
-        <NextToGoRaceList
-            :data="availableRaces"
-            :max="RACE_COUNT_THRESHOLD"
-            :categoryIds="selectedFilters"
-            @remove="removeRace" />
+        <NextToGoRaceList :data="availableRaces" :max="threshold" :categoryIds="selectedFilters" @remove="removeRace" />
     </div>
 </template>

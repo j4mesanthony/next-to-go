@@ -2,9 +2,7 @@ import { nextToGo as API } from "../apis/api.nextToGo";
 import { onMounted, ref, computed, watch } from "vue";
 import { RACING_CATEGORIES_LIST } from "../../../consts/consts.racingCategories";
 
-export function useNextToGoRaces() {
-    const RACE_COUNT_THRESHOLD = 5;
-
+export function useNextToGoRaces(threshold = 5) {
     const isLoading = ref(false);
     const raceSummaries = ref([]);
     const selectedFilters = ref([]);
@@ -57,16 +55,16 @@ export function useNextToGoRaces() {
     watch(
         () => availableRaces.value.length,
         (len) => {
-            if (len < RACE_COUNT_THRESHOLD) getNextRaces();
+            if (len < threshold) getNextRaces();
         }
     );
 
     return {
-        RACING_CATEGORIES_LIST,
-        RACE_COUNT_THRESHOLD,
         availableRaces,
         isLoading,
+        RACING_CATEGORIES_LIST,
         removeRace,
         selectedFilters,
+        threshold,
     };
 }

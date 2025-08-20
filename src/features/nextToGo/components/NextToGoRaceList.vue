@@ -15,7 +15,7 @@
         // Maximum numer of items in list
         max: {
             type: Number,
-            default: 5,
+            required: true,
         },
 
         // List of category IDs to filter races. Defaults to an empty array.

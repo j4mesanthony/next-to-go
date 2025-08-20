@@ -26,7 +26,7 @@ describe("NextToGoRaceList.vue", () => {
                 advertised_start: { seconds: now + 125 },
             }),
         ];
-        const wrapper = mount(NextToGoRaceList, { props: { data, categoryIds: [horseCategoryId] } });
+        const wrapper = mount(NextToGoRaceList, { props: { data, max: 2, categoryIds: [horseCategoryId] } });
 
         // Do descriptions show and are formatted as expected?
         expect(wrapper.get('[data-test-id="b70a4404-a8c5-4360-b289-d1644547ee89"]').text()).toContain("Albion Park R5");
@@ -51,7 +51,7 @@ describe("NextToGoRaceList.vue", () => {
             base({ race_id: "b70a4404-a8c5-4360-b289-d1644547ee89", category_id: horseCategoryId }),
             base({ race_id: "7a8cd994-e6d0-4220-9a00-7908a76dc098", category_id: greyhoundCategoryId }),
         ];
-        const wrapper = mount(NextToGoRaceList, { props: { data, categoryIds: [horseCategoryId] } });
+        const wrapper = mount(NextToGoRaceList, { props: { data, max: 5, categoryIds: [horseCategoryId] } });
 
         // Only 1 race should exist (greyhound is not valid category)
         expect(wrapper.findAll('[data-test-id="raceItem"]').length).toBe(1);
