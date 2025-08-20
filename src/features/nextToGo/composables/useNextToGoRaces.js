@@ -1,15 +1,13 @@
 import { nextToGo as API } from "../apis/api.nextToGo";
-import { onMounted, reactive, computed, watch, toRefs } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import { RACING_CATEGORIES_LIST } from "../../../consts/consts.racingCategories";
 
 export function useNextToGoRaces() {
     const RACE_COUNT_THRESHOLD = 5;
 
-    const state = reactive({
-        isLoading: false,
-        raceSummaries: [],
-        selectedFilters: [],
-    });
+    const isLoading = ref(false);
+    const raceSummaries = ref([]);
+    const selectedFilters = ref([]);
 
     onMounted(getNextRaces);
 
@@ -25,7 +23,7 @@ export function useNextToGoRaces() {
             return diffInSeconds >= -60;
         };
 
-        return state.raceSummaries.filter(_byLessThanMinuteOld);
+        return raceSummaries.value.filter(_byLessThanMinuteOld);
     });
 
     /**
@@ -34,16 +32,16 @@ export function useNextToGoRaces() {
      * @returns {Promise<void>} Resolves when the race summaries have been fetched and state updated.
      */
     async function getNextRaces() {
-        state.isLoading = true;
+        isLoading.value = true;
         try {
             const { data } = await API.getNextRaces();
             const { race_summaries } = data;
             // Populate raceSummaries with any new races from API response (no duplicates).
-            const existingIds = state.raceSummaries.map(({ race_id }) => race_id);
+            const existingIds = raceSummaries.value.map(({ race_id }) => race_id);
             const newRaces = Object.values(race_summaries).filter((x) => !existingIds.includes(x.race_id));
-            state.raceSummaries = [...state.raceSummaries, ...newRaces];
+            raceSummaries.value = [...raceSummaries.value, ...newRaces];
         } finally {
-            state.isLoading = false;
+            isLoading.value = false;
         }
     }
 
@@ -52,7 +50,7 @@ export function useNextToGoRaces() {
      * @param {string|number} raceId - The unique identifier of the race to remove.
      */
     function removeRace(raceId) {
-        state.raceSummaries = state.raceSummaries.filter(({ race_id }) => race_id !== raceId);
+        raceSummaries.value = raceSummaries.value.filter(({ race_id }) => race_id !== raceId);
     }
 
     // Once our list of races drops below threshold, fetch new list from API.
@@ -62,8 +60,6 @@ export function useNextToGoRaces() {
             if (len < RACE_COUNT_THRESHOLD) getNextRaces();
         }
     );
-
-    const { isLoading, selectedFilters } = toRefs(state);
 
     return {
         RACING_CATEGORIES_LIST,
